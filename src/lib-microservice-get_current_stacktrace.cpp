@@ -12,7 +12,7 @@
 #include <cstring>
 #include <regex.h>
 
-int msilog_stacktrace(
+int msiget_current_stacktrace(
     msParam_t*      stacktrace_out,
     ruleExecInfo_t* _rei ) 
 {
@@ -26,11 +26,11 @@ int msilog_stacktrace(
     }
     catch (irods::error& e) {
        i = e.code();
-       rodsLog(LOG_ERROR, "In msilog_stacktrace: irods error [%d]",i);
+       rodsLog(LOG_ERROR, "In msiget_current_stacktrace: irods error [%d]",i);
     }
     catch (std::exception& e) {
        i = -1;
-       rodsLog(LOG_ERROR, "In msilog_stacktrace: something went wrong: %s",e.what());
+       rodsLog(LOG_ERROR, "In msiget_current_stacktrace: something went wrong: %s",e.what());
     }
     return i;
 }
@@ -40,17 +40,17 @@ irods::ms_table_entry* plugin_factory() {
     irods::ms_table_entry* msvc = new irods::ms_table_entry(1);
     msvc->add_operation<
         msParam_t*,
-        ruleExecInfo_t*>("msilog_stacktrace",
+        ruleExecInfo_t*>("msiget_current_stacktrace",
                          std::function<int(
                              msParam_t*,
-                             ruleExecInfo_t*)>(msilog_stacktrace));
+                             ruleExecInfo_t*)>(msiget_current_stacktrace));
     return msvc;
 }
 
 /*=====================================
 
 
-int msilog_stacktrace( msParam_t* where, ruleExecInfo_t *rei ) {
+int msiget_current_stacktrace( msParam_t* where, ruleExecInfo_t *rei ) {
     int i;
     char *writeId = ( char * ) where->inOutStruct;
     irods::stacktrace st; 
@@ -68,10 +68,10 @@ irods::ms_table_entry* plugin_factory() {
     irods::ms_table_entry* msvc = new irods::ms_table_entry(1);
     msvc->add_operation<
         msParam_t*,
-        ruleExecInfo_t*>("msilog_stacktrace",
+        ruleExecInfo_t*>("msiget_current_stacktrace",
                          std::function<int(
                              msParam_t*,
-                             ruleExecInfo_t*)>(msilog_stacktrace));
+                             ruleExecInfo_t*)>(msiget_current_stacktrace));
     return msvc;
 }
 
